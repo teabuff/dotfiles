@@ -1,0 +1,80 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc. Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=1000000
+SAVEHIST=1000000
+
+# >>> fpath >>>
+fpath=($fpath ~/.zfunc)
+# <<< fpath <<<
+
+# >>> vi mode >>>
+export EDITOR=nvim
+export VISUAL=nvim
+bindkey -v
+export KEYTIMEOUT=1
+bindkey "^H" backward-delete-char
+bindkey "^?" backward-delete-char
+bindkey -M viins '^A' beginning-of-line
+bindkey -M viins '^B' backward-char
+bindkey -M viins '^E' end-of-line
+bindkey -M viins '^F' forward-char
+bindkey -M viins '^N' down-line-or-history
+bindkey -M viins '^P' up-line-or-history
+bindkey -M viins '^Y' yank
+bindkey -M vicmd '^R' redo
+# <<< vi mode <<<
+
+bindkey "^[^L" clear-screen
+
+# >>> alias >>>
+alias vim='nvim'
+# <<< alias <<<
+
+pathappend() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="${PATH:+"$PATH:"}$1"
+    fi
+}
+
+pathprepend() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="$1${PATH:+":$PATH"}"
+    fi
+}
+
+# >>> custom system path >>>
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+export MODULAR_HOME="$HOME/.modular"
+pathprepend "$HOME/go/bin"
+pathprepend "$HOME/.modular/pkg/packages.modular.com_max/bin"
+pathprepend "$HOME/.pub-cache/bin"
+pathprepend "$HOME/.local/bin"
+source "$HOME/.cargo/env"
+source "$HOME/.rye/env"
+# <<< custom system path <<<
+
+# >>> tools configuartion >>>
+eval "$(zoxide init zsh)"
+# eval "$(/home/linuxbrew/.linuxbrew/bin/fzf --zsh)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+source /home/linuxbrew/.linuxbrew/share/powerlevel10k/powerlevel10k.zsh-theme
+source /home/linuxbrew/.linuxbrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# <<< tools configuration <<<
+
+# >>> atuin setup >>>
+export ATUIN_NOBIND="true"
+eval "$(atuin init zsh)"
+
+bindkey -M viins '^r' atuin-search
+# <<< atuin setup <<<
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Init Conda
+eval "$(/home/teabuff/depot/devtools/miniconda3/bin/conda shell.zsh hook)"

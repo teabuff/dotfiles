@@ -1,0 +1,47 @@
+serverAddr = "{{ onepasswordRead "op://Personal/frpc.toml/serverAddr" }}"
+serverPort = 7000
+
+log.to = "/tmp/frpc.log"
+log.level = "info"
+log.maxDays = 3
+
+webServer.addr = "127.0.0.1"
+webServer.port = 7400
+webServer.user = "{{ onepasswordRead "op://Personal/frpc.toml/webServerUser" }}"
+webServer.password = "{{ onepasswordRead "op://Personal/frpc.toml/webServerPassword" }}"
+
+[[proxies]]
+name = "label-studio"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 8080
+remotePort = 8080
+customDomains = ["{{ onepasswordRead "op://Personal/frpc.toml/labelStudioCustomDomain" }}"]
+
+[[proxies]]
+name = "label-studio-mlbe"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 9080
+remotePort = 9080
+
+[[proxies]]
+name = "ssh"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 22
+remotePort = 2222
+
+[[proxies]]
+name = "chatgpt"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 3000
+remotePort = 7860
+
+[[proxies]]
+name = "follow"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 8100
+remotePort = 8100

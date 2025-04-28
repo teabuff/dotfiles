@@ -1,0 +1,13 @@
+[Container]
+ContainerName=redis_server
+Image=docker.io/redis/redis-stack:latest
+Network=redis_default
+PublishPort=6379:6379
+PublishPort=8001:8001
+Volume=%h/.local/data/redis-data/:/data
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

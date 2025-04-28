@@ -1,0 +1,12 @@
+[Container]
+ContainerName=flower
+Exec=celery '--broker=redis://host.containers.internal:6379/0' flower
+Image=docker.io/mher/flower
+Network=redis_default
+PublishPort=5555:5555
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
